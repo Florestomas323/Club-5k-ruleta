@@ -7,7 +7,7 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="theme-color" content="#0A1834">
-<title>Gira y Gana</title>
+<title>Club de los $5.000</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;800&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -46,16 +46,13 @@
   }
 
   header{text-align:center}
+  html.has-fs{--fs-space:104px}   /* espacio para el botón de pantalla completa */
   h1{
     font-family:var(--display);font-weight:800;
-    font-size:clamp(30px, 7.4vw, 64px);
+    font-size:clamp(20px, 7vw, 64px);font-size:clamp(16px, calc((100vw - 32px - var(--fs-space, 0px)) / 11.9), 64px);text-wrap:balance;
     letter-spacing:.06em;line-height:1;
     background:linear-gradient(180deg,#F8EBC4 0%, var(--gold) 55%, var(--gold-deep) 100%);
     -webkit-background-clip:text;background-clip:text;color:transparent;
-  }
-  h1 .gift{-webkit-text-fill-color:initial;color:initial;font-size:.8em;vertical-align:.06em}
-  .subtitle{
-    margin-top:8px;font-size:clamp(17px, 3.6vw, 28px);font-weight:500;color:var(--gold-light);
   }
 
   /* ---------- Ruleta ---------- */
@@ -98,7 +95,13 @@
       radial-gradient(circle at 38% 30%, #FFF4CF 0%, #E6C66E 30%, #C79A3A 62%, #8C6420 100%);
     box-shadow:0 0 0 3px #8C6420, 0 0 0 6px #0A1834, 0 0 0 8px #D4AF55, 0 10px 24px rgba(0,0,0,.5), inset 0 -4px 8px rgba(94,66,20,.45), inset 0 3px 5px rgba(255,255,255,.6);
     display:flex;align-items:center;justify-content:center;
+    appearance:none;-webkit-appearance:none;border:0;padding:0;margin:0;cursor:pointer;
+    transition:transform .12s ease;
   }
+  /* El centro también es botón de girar */
+  .hub:active:not(:disabled){transform:translate(-50%,-50%) scale(.92)}
+  .hub:disabled{cursor:default}
+  .hub:focus-visible{outline:3px solid var(--white);outline-offset:6px}
   .hub svg{width:58%;height:58%;filter:drop-shadow(0 1px 1px rgba(255,255,255,.45))}
   .hub::after{content:'';position:absolute;inset:8%;border-radius:50%;border:1.5px solid rgba(255,244,207,.6);pointer-events:none}
   /* Flecha fija arriba */
@@ -130,11 +133,26 @@
     display:grid;grid-template-columns:repeat(4, 1fr);gap:clamp(6px, 1.6vw, 16px);
     width:min(100%, 640px);
   }
-  .prize{display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center}
+  .prize{
+    display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center;
+    appearance:none;-webkit-appearance:none;background:none;border:0;padding:0;font:inherit;color:inherit;
+  }
+  .prize .pic{position:relative;width:100%;max-width:92px}
   .prize img{
-    width:100%;max-width:92px;aspect-ratio:1/1;object-fit:cover;border-radius:50%;
+    display:block;width:100%;aspect-ratio:1/1;object-fit:cover;border-radius:50%;
     border:2px solid rgba(212,175,85,.55);background:var(--ivory);
   }
+  /* Premio quitado de la ruleta: se ve apagado y al tocarlo se puede volver a poner */
+  .prize.agotado{cursor:pointer}
+  .prize.agotado img{filter:grayscale(1) brightness(.55);border-color:rgba(255,255,255,.25)}
+  .prize.agotado span{opacity:.6;text-decoration:line-through}
+  .prize .badge{
+    position:absolute;left:50%;top:50%;transform:translate(-50%,-50%) rotate(-10deg);
+    font-style:normal;font-weight:700;font-size:clamp(10px, 2.3vw, 13px);letter-spacing:.03em;white-space:nowrap;
+    color:var(--navy-900);background:var(--gold-light);padding:.25em .55em;border-radius:6px;
+    box-shadow:0 2px 8px rgba(0,0,0,.45);
+  }
+  .prize.agotado:focus-visible{outline:3px solid var(--white);outline-offset:4px;border-radius:12px}
   .prize span{font-size:clamp(11px, 2.4vw, 15px);line-height:1.15;color:#DCE3F2;font-weight:500}
   .prize.featured img{border:3px solid var(--gold);box-shadow:0 0 0 3px rgba(212,175,85,.25), 0 0 22px rgba(212,175,85,.55)}
   .prize.featured span{color:var(--gold-light);font-weight:700}
@@ -214,7 +232,7 @@
 
   .won-name{
     font-family:var(--display);font-weight:800;line-height:1.05;text-transform:uppercase;letter-spacing:.02em;
-    font-size:clamp(28px, 7.6vw, 52px);color:var(--navy-900);max-width:14ch;
+    font-size:clamp(28px, 7.6vw, 52px);font-size:clamp(26px, min(7.6vw, 5.4dvh), 52px);color:var(--navy-900);max-width:14ch;
   }
   .note{margin-top:14px;font-size:clamp(15px, 3.2vw, 18px);color:#4A5A7A;max-width:32ch;line-height:1.4}
   .next-btn{
@@ -226,6 +244,13 @@
     box-shadow:0 0 0 2px var(--gold) inset, 0 10px 22px rgba(10,24,52,.3);
   }
   .next-btn:active{transform:translateY(2px)}
+  .remove-btn{
+    margin-top:10px;appearance:none;border:0;background:none;cursor:pointer;
+    font-family:var(--body);font-weight:600;font-size:clamp(14px, 3.4vw, 16px);
+    color:#6B5220;text-decoration:underline;text-underline-offset:3px;padding:.6em .9em;
+  }
+  .remove-btn[hidden]{display:none}
+  .remove-btn:focus-visible{outline:3px solid var(--gold-deep);outline-offset:2px;border-radius:8px}
 
   /* ---- Resultado especial: premio destacado (featured: true) ---- */
   .card.featured{
@@ -249,10 +274,56 @@
   .card.featured .note{color:#C9D3E8}
   .card.featured .next-btn{background:linear-gradient(180deg,#F8EBC4 0%, var(--gold) 50%, var(--gold-deep) 100%);color:var(--navy-900);box-shadow:0 10px 22px rgba(0,0,0,.4)}
 
+  .card.featured .remove-btn{color:var(--gold-light)}
+
+  /* ---------- Confirmación: quitar o volver a poner un premio ---------- */
+  .ask{
+    position:fixed;inset:0;z-index:40;display:flex;align-items:center;justify-content:center;padding:20px;
+    background:rgba(6,14,32,.62);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);
+    opacity:0;visibility:hidden;transition:opacity .2s ease, visibility .2s;
+  }
+  .ask.show{opacity:1;visibility:visible}
+  .ask-card{
+    width:min(90vw, 420px);border-radius:24px;padding:26px 22px 22px;text-align:center;
+    background:radial-gradient(120% 80% at 50% 0%, #25468A 0%, #13295A 50%, #0A1834 100%);
+    box-shadow:0 0 0 2px var(--gold), 0 0 0 8px rgba(212,175,85,.18), 0 24px 60px rgba(0,0,0,.55);
+  }
+  .ask-title{font-weight:700;font-size:clamp(19px, 4.6vw, 24px);line-height:1.25;color:var(--gold-light)}
+  .ask-text{margin-top:10px;font-size:clamp(15px, 3.6vw, 17px);line-height:1.4;color:#C9D3E8}
+  .ask-actions{margin-top:20px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+  .ask-actions button{
+    appearance:none;border:0;cursor:pointer;border-radius:999px;padding:.85em 1.4em;
+    font-family:var(--body);font-weight:700;font-size:clamp(15px, 3.8vw, 17px);
+  }
+  .ask-yes{background:linear-gradient(180deg,#F8EBC4 0%, var(--gold) 50%, var(--gold-deep) 100%);color:var(--navy-900);box-shadow:0 8px 18px rgba(0,0,0,.35)}
+  .ask-no{background:transparent;color:var(--gold-light);box-shadow:0 0 0 1.5px rgba(212,175,85,.75) inset}
+  .ask-actions button:focus-visible{outline:3px solid var(--white);outline-offset:3px}
+
+  /* Aviso breve arriba */
+  .toast{
+    position:fixed;left:50%;top:max(14px, env(safe-area-inset-top));z-index:45;
+    transform:translate(-50%, -16px);max-width:92vw;
+    padding:.7em 1.2em;border-radius:999px;text-align:center;
+    font-weight:600;font-size:clamp(14px, 3.4vw, 16px);color:var(--gold-light);
+    background:rgba(10,24,52,.94);box-shadow:0 0 0 1px rgba(212,175,85,.6), 0 12px 28px rgba(0,0,0,.45);
+    opacity:0;visibility:hidden;transition:opacity .25s ease, transform .25s ease, visibility .25s;
+  }
+  .toast.show{opacity:1;visibility:visible;transform:translate(-50%, 0)}
+
   #confetti{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:30}
 
+  /* Pantallas bajas (iPad horizontal, iPhone SE): resultado más compacto */
+  @media (max-height:780px){
+    .card{padding-top:clamp(20px, 3.4dvh, 30px);padding-bottom:clamp(14px, 2.4dvh, 22px)}
+    .won-label{margin-top:6px}
+    .won-media{margin:12px 0 8px}
+    .note{margin-top:8px}
+    .next-btn{margin-top:14px}
+    .remove-btn{margin-top:4px}
+  }
+
   /* Pantallas bajas (teléfono horizontal): ocultar tira de premios */
-  @media (max-height:520px){ .prizes{display:none} .subtitle{margin-top:2px} }
+  @media (max-height:520px){ .prizes{display:none} .card{overflow-y:auto} }
 
   @media (prefers-reduced-motion: reduce){
     .card{transition:none} .pointer.flick{animation:none}
@@ -268,8 +339,7 @@
 
 <main class="app">
   <header>
-    <h1>GIRA Y GANA <span class="gift">🎁</span></h1>
-    <p class="subtitle">¡Todos ganan!</p>
+    <h1>CLUB DE LOS $5.000</h1>
   </header>
 
   <section class="stage">
@@ -277,9 +347,9 @@
       <div class="wheel-halo"></div>
       <canvas id="wheel" aria-label="Ruleta de premios"></canvas>
       <div class="wheel-gloss" aria-hidden="true"></div>
-      <div class="hub" aria-hidden="true">
+      <button class="hub" id="hubBtn" type="button" aria-label="Girar la ruleta">
         <svg viewBox="0 0 24 24"><defs><linearGradient id="hs" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2A4D96"/><stop offset="1" stop-color="#0A1834"/></linearGradient></defs><path d="M12 2.5l2.7 6.1 6.6.6-5 4.4 1.5 6.5L12 16.7l-5.8 3.4 1.5-6.5-5-4.4 6.6-.6z" fill="url(#hs)"/></svg>
-      </div>
+      </button>
       <svg class="pointer" id="pointer" viewBox="0 0 100 100" aria-hidden="true">
         <defs>
           <linearGradient id="pg" x1="0" y1="0" x2="1" y2="1">
@@ -327,8 +397,21 @@
     <div class="won-name" id="wonName"></div>
     <p class="note">Pasa con nosotros para registrar la entrega de tu premio.</p>
     <button class="next-btn" id="nextBtn">SIGUIENTE PARTICIPANTE</button>
+    <button class="remove-btn" id="removeBtn" type="button">Quitar este premio de la ruleta</button>
   </div>
 </div>
+
+<div class="ask" id="ask" role="alertdialog" aria-modal="true" aria-labelledby="askTitle" aria-describedby="askText">
+  <div class="ask-card">
+    <p class="ask-title" id="askTitle"></p>
+    <p class="ask-text" id="askText"></p>
+    <div class="ask-actions">
+      <button class="ask-no" id="askNo" type="button">Cancelar</button>
+      <button class="ask-yes" id="askYes" type="button"></button>
+    </div>
+  </div>
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <canvas id="confetti"></canvas>
 
@@ -431,20 +514,32 @@ function loadImage(src) {
    --------------------------------------------------------------------- */
 const wheel = document.getElementById('wheel');
 const ctx = wheel.getContext('2d');
-const SEG = 360 / PRIZES.length;
-const WIDE = SEG >= 90;   // 4 premios o menos: fotos y letras más grandes
+// Premios que siguen en la ruleta (posiciones en PRIZES). Al quitar uno,
+// su probabilidad se reparte entre los que quedan.
+let active = PRIZES.map((_, i) => i);
+let SEG = 360 / active.length;
+let WIDE = SEG >= 90;     // 4 premios o menos: fotos y letras más grandes
+function updateGeometry() { SEG = 360 / active.length; WIDE = SEG >= 90; }
 const PALETTE = [
   { fill: '#13295A', text: '#FFFFFF' },  // azul marino
   { fill: '#FBF8F1', text: '#0A1834' },  // blanco marfil
 ];
+const ROYAL_STYLE = { fill: '#1F3C7A', text: '#FFFFFF' };    // azul real (cantidad impar)
 const FEATURED_STYLE = { fill: 'gold', text: '#0A1834' };
 let images = [];
 
+// Estilo del segmento que está en la posición i de la ruleta
 function segmentStyle(i) {
-  if (PRIZES[i].featured) return FEATURED_STYLE;
+  if (PRIZES[active[i]].featured) return FEATURED_STYLE;
   // alterna colores entre los no destacados
-  let n = 0;
-  for (let k = 0; k < i; k++) if (!PRIZES[k].featured) n++;
+  let n = 0, total = 0;
+  for (let k = 0; k < active.length; k++) {
+    if (PRIZES[active[k]].featured) continue;
+    if (k < i) n++;
+    total++;
+  }
+  // con una cantidad impar, el último no repite el color del primero
+  if (total > 1 && total % 2 === 1 && n === total - 1) return ROYAL_STYLE;
   return PALETTE[n % 2];
 }
 
@@ -476,7 +571,8 @@ let wheelArt = null;
 
 // Ruleta con el diseño en imagen (se usa si la imagen cargó)
 function drawWheel() {
-  if (!wheelArt) return drawWheelClassic();
+  // el diseño en imagen trae todos los premios: si se quitó alguno, se dibuja por código
+  if (!wheelArt || active.length !== PRIZES.length) return drawWheelClassic();
   const cssSize = wheel.getBoundingClientRect().width;
   if (!cssSize) return;
   const dpr = Math.min(window.devicePixelRatio || 1, 3);
@@ -535,7 +631,7 @@ function drawWheelClassic() {
   ctx.fillStyle = ch; ctx.fill();
 
   // Luces tipo marquesina
-  const bulbs = PRIZES.length * Math.max(4, Math.round(20 / PRIZES.length)), midRim = (chOut + chIn) / 2, bR = (chOut - chIn) * 0.26;
+  const bulbs = active.length * Math.max(4, Math.round(20 / active.length)), midRim = (chOut + chIn) / 2, bR = (chOut - chIn) * 0.26;
   for (let k = 0; k < bulbs; k++) {
     const a = toRad(k * 360 / bulbs + 360 / bulbs / 2);
     const x = c + Math.cos(a) * midRim, y = c + Math.sin(a) * midRim;
@@ -548,12 +644,13 @@ function drawWheelClassic() {
   }
 
   // --- Segmentos ---
-  PRIZES.forEach((p, i) => {
+  active.forEach((pi, i) => {
     const a0 = toRad(i * SEG), a1 = toRad((i + 1) * SEG);
     const st = segmentStyle(i);
     let g = ctx.createRadialGradient(c, c, r * 0.15, c, c, r);
     if (st.fill === 'gold') { g.addColorStop(0, '#FBEFC9'); g.addColorStop(.6, '#D4AF55'); g.addColorStop(1, '#9E7428'); }
     else if (st.fill === '#13295A') { g.addColorStop(0, '#264A8F'); g.addColorStop(1, '#0D1E45'); }
+    else if (st.fill === '#1F3C7A') { g.addColorStop(0, '#3B64B5'); g.addColorStop(1, '#17316B'); }
     else { g.addColorStop(0, '#FFFFFF'); g.addColorStop(1, '#EDE3CC'); }
     ctx.beginPath(); ctx.moveTo(c, c); ctx.arc(c, c, r, a0, a1); ctx.closePath();
     ctx.fillStyle = g; ctx.fill();
@@ -564,8 +661,8 @@ function drawWheelClassic() {
   depth.addColorStop(0, 'rgba(0,0,0,0)'); depth.addColorStop(1, 'rgba(0,0,0,.22)');
   ctx.beginPath(); ctx.arc(c, c, r, 0, TAU); ctx.fillStyle = depth; ctx.fill();
 
-  // --- Divisiones doradas ---
-  PRIZES.forEach((p, i) => {
+  // --- Divisiones doradas (con un solo premio no hay divisiones) ---
+  if (active.length > 1) active.forEach((pi, i) => {
     const a = toRad(i * SEG);
     const x1 = c + Math.cos(a) * r * 0.18, y1 = c + Math.sin(a) * r * 0.18;
     const x2 = c + Math.cos(a) * r, y2 = c + Math.sin(a) * r;
@@ -582,10 +679,11 @@ function drawWheelClassic() {
   ctx.beginPath(); ctx.arc(c, c, r, 0, TAU); ctx.stroke();
 
   // --- Contenido de cada segmento: foto + nombre ---
-  PRIZES.forEach((p, i) => {
+  active.forEach((pi, i) => {
+    const p = PRIZES[pi];
     const mid = toRad(i * SEG + SEG / 2);
     const st = segmentStyle(i);
-    const onNavy = st.fill === '#13295A';
+    const onNavy = st.fill === '#13295A' || st.fill === '#1F3C7A';
     ctx.save();
     ctx.translate(c, c);
     ctx.rotate(mid + Math.PI / 2);
@@ -630,7 +728,7 @@ function drawWheelClassic() {
     if ('letterSpacing' in ctx) ctx.letterSpacing = '0px';
 
     // Foto en medallón con marco dorado
-    const img = images[i];
+    const img = images[pi];
     const imgR = r * (WIDE ? 0.25 : 0.2);
     const imgY = -r * (WIDE ? 0.52 : 0.47);
     ctx.shadowColor = 'rgba(0,0,0,.35)'; ctx.shadowBlur = r * 0.04; ctx.shadowOffsetY = r * 0.012;
@@ -697,6 +795,7 @@ function playWin() {
    c) Se anima con desaceleración (easeOutQuart).
    --------------------------------------------------------------------- */
 const spinBtn = document.getElementById('spinBtn');
+const hubBtn = document.getElementById('hubBtn');   // centro de la ruleta
 const pointer = document.getElementById('pointer');
 let rotation = 0;        // grados acumulados actuales
 let spinning = false;
@@ -705,16 +804,17 @@ const easeOutQuart = t => 1 - Math.pow(1 - t, 4);
 const randBetween = (a, b) => a + secureRandom() * (b - a);
 const norm = d => ((d % 360) + 360) % 360;
 // Índice del segmento bajo la flecha para una rotación dada
-const segmentAt = rot => Math.floor(norm(-rot) / SEG) % PRIZES.length;
+const segmentAt = rot => Math.floor(norm(-rot) / SEG) % active.length;
 
 function spin() {
   if (spinning) return;
   ensureAudio();
   spinning = true;
   spinBtn.disabled = true;
+  hubBtn.disabled = true;
 
   // a) ganador
-  const winner = pickWeightedIndex(PRIZES);
+  const winner = pickWeightedIndex(active.map(pi => PRIZES[pi]));   // posición en la ruleta
 
   // b) ángulo destino: la flecha apunta al ángulo (-rotación) de la rueda
   const jitter = randBetween(-SEG * 0.35, SEG * 0.35);
@@ -760,9 +860,15 @@ const card = document.getElementById('card');
 const wonImg = document.getElementById('wonImg');
 const wonName = document.getElementById('wonName');
 const nextBtn = document.getElementById('nextBtn');
+const removeBtn = document.getElementById('removeBtn');
 
-function showResult(i) {
+let lastWon = -1;   // premio (posición en PRIZES) que acaba de salir
+
+function showResult(pos) {
+  const i = active[pos];
+  lastWon = i;
   const p = PRIZES[i];
+  removeBtn.hidden = active.length < 2;   // siempre queda al menos un premio
   wonName.textContent = p.name;
   if (images[i]) { wonImg.src = images[i].src; wonImg.style.display = ''; }
   else wonImg.style.display = 'none';
@@ -778,6 +884,7 @@ function nextParticipant() {
   stopConfetti();
   spinning = false;
   spinBtn.disabled = false;
+  hubBtn.disabled = false;
   // Se normaliza la rotación para que el número no crezca sin límite
   rotation = norm(rotation);
   wheel.style.transform = `rotate(${rotation}deg)`;
@@ -880,22 +987,112 @@ function thumbSrc(i) {
   } catch (e) { return img.src; }   // p. ej. abierto como archivo local
 }
 
+const thumbs = [];   // miniaturas ya recortadas
+
 function buildStrip() {
   const strip = document.getElementById('prizeStrip');
   strip.innerHTML = '';
   strip.style.gridTemplateColumns = `repeat(${PRIZES.length}, 1fr)`;
   PRIZES.forEach((p, i) => {
-    const el = document.createElement('div');
-    el.className = 'prize' + (p.featured ? ' featured' : '');
+    const out = !active.includes(i);                     // quitado de la ruleta
+    const el = document.createElement(out ? 'button' : 'div');
+    el.className = 'prize' + (p.featured ? ' featured' : '') + (out ? ' agotado' : '');
+    if (out) {
+      el.type = 'button';
+      el.setAttribute('aria-label', `${p.name}, agotado. Toca para volver a ponerlo en la ruleta`);
+      el.addEventListener('click', () => askRestore(i));
+    }
+    const pic = document.createElement('div');
+    pic.className = 'pic';
     const img = document.createElement('img');
-    img.alt = p.name;
-    if (images[i]) img.src = thumbSrc(i);
+    img.alt = out ? '' : p.name;
+    if (images[i]) img.src = thumbs[i] || (thumbs[i] = thumbSrc(i));
+    pic.append(img);
+    if (out) {
+      const badge = document.createElement('em');
+      badge.className = 'badge';
+      badge.textContent = 'Agotado';
+      pic.append(badge);
+    }
     const label = document.createElement('span');
     label.textContent = p.name;
-    el.append(img, label);
+    el.append(pic, label);
     strip.appendChild(el);
   });
 }
+
+/* ---------------------------------------------------------------------
+   10. QUITAR Y VOLVER A PONER PREMIOS
+   Después de cada premio se puede quitar de la ruleta. La ruleta se
+   vuelve a dibujar sin él y su probabilidad se reparte entre los que
+   quedan, en proporción a su "weight" (con pesos iguales, en partes
+   iguales). Siempre queda al menos un premio.
+   En la tira de abajo el premio quitado sale como "Agotado": al tocarlo
+   se puede volver a poner. Al recargar la página vuelven todos.
+   --------------------------------------------------------------------- */
+const ask = document.getElementById('ask');
+const askTitle = document.getElementById('askTitle');
+const askText = document.getElementById('askText');
+const askYes = document.getElementById('askYes');
+const askNo = document.getElementById('askNo');
+const toastEl = document.getElementById('toast');
+let askAction = null, toastTimer = null;
+
+// Cómo queda la probabilidad con esta lista de premios
+function shareText(list) {
+  if (list.length === 1) return `Quedará solo «${PRIZES[list[0]].name}» y saldrá en todos los giros.`;
+  const w = list.map(pi => Math.max(0, PRIZES[pi].weight));
+  const total = w.reduce((a, b) => a + b, 0) || 1;
+  const pct = w.map(x => Math.round(x / total * 100));
+  if (pct.every(x => x === pct[0])) return `Quedarán ${list.length} premios con ${pct[0]}% cada uno.`;
+  return 'Nueva probabilidad: ' + list.map((pi, k) => `${PRIZES[pi].name} ${pct[k]}%`).join(', ') + '.';
+}
+
+function openAsk(title, text, yesLabel, action) {
+  askTitle.textContent = title;
+  askText.textContent = text;
+  askYes.textContent = yesLabel;
+  askAction = action;
+  ask.classList.add('show');
+  askNo.focus();
+}
+function closeAsk() { ask.classList.remove('show'); askAction = null; }
+
+function showToast(msg) {
+  toastEl.textContent = msg;
+  toastEl.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => toastEl.classList.remove('show'), 3200);
+}
+
+function refreshWheel() { updateGeometry(); drawWheel(); buildStrip(); }
+
+function askRemove() {
+  const i = lastWon;
+  if (i < 0 || active.length < 2 || !active.includes(i)) return;
+  const rest = active.filter(k => k !== i);
+  openAsk(`¿Quitar «${PRIZES[i].name}» de la ruleta?`, shareText(rest), 'Sí, quitar', () => {
+    active = rest;
+    refreshWheel();
+    nextParticipant();
+    showToast(`«${PRIZES[i].name}» ya no está en la ruleta.`);
+  });
+}
+
+function askRestore(i) {
+  if (spinning || active.includes(i)) return;
+  const back = PRIZES.map((_, k) => k).filter(k => k === i || active.includes(k));   // mismo orden que PRIZES
+  openAsk(`¿Volver a poner «${PRIZES[i].name}» en la ruleta?`, shareText(back), 'Sí, volver a ponerlo', () => {
+    active = back;
+    refreshWheel();
+    showToast(`«${PRIZES[i].name}» volvió a la ruleta.`);
+  });
+}
+
+askYes.addEventListener('click', () => { const a = askAction; closeAsk(); if (a) a(); });
+askNo.addEventListener('click', closeAsk);
+ask.addEventListener('click', e => { if (e.target === ask) closeAsk(); });   // tocar fuera = cancelar
+document.addEventListener('keydown', e => { if (e.key === 'Escape' && ask.classList.contains('show')) closeAsk(); });
 
 function setupFullscreen() {
   const btn = document.getElementById('fsBtn');
@@ -903,6 +1100,7 @@ function setupFullscreen() {
   const req = root.requestFullscreen || root.webkitRequestFullscreen;
   if (!req) return;
   btn.style.display = 'flex';
+  document.documentElement.classList.add('has-fs');
   btn.addEventListener('click', () => {
     const inFs = document.fullscreenElement || document.webkitFullscreenElement;
     if (inFs) (document.exitFullscreen || document.webkitExitFullscreen).call(document);
@@ -924,6 +1122,8 @@ async function init() {
   buildStrip();
   setupFullscreen();
   spinBtn.addEventListener('click', spin);
+  hubBtn.addEventListener('click', spin);            // el centro de la ruleta también gira
+  removeBtn.addEventListener('click', askRemove);
   nextBtn.addEventListener('click', nextParticipant);
   let rt;
   window.addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(drawWheel, 120); });
